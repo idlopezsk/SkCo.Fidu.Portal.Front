@@ -23,17 +23,17 @@ import { CommonModule } from '@angular/common';
         CommonModule
     ],
     template: `
-        <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+        <div class="min-h-screen flex items-center justify-center bg-skandia-light-gray dark:from-gray-900 dark:to-gray-800">
             <div class="w-full max-w-md">
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-skandia-medium p-8">
                     <!-- Logo and Header -->
                     <div class="text-center mb-8">
-                        <div class="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div class="w-20 h-20 bg-skandia-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-skandia-small">
                             <i class="pi pi-building text-3xl text-white"></i>
                         </div>
-                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Portal MIGO</h1>
-                        <h2 class="text-xl text-gray-600 dark:text-gray-300">Fiduciaria</h2>
-                        <p class="text-gray-500 dark:text-gray-400 mt-2">Bienvenido al sistema de gestión</p>
+                        <h1 class="text-3xl font-bold text-skandia-gray dark:text-white mb-2" style="font-family: var(--font-family-headings);">Portal MIGO</h1>
+                        <h2 class="text-xl text-skandia-gray dark:text-gray-300" style="font-family: var(--font-family-headings);">Fiduciaria</h2>
+                        <p class="text-skandia-gray-5 dark:text-gray-400 mt-2 body-2">Bienvenido al sistema de gestión</p>
                     </div>
 
                     <!-- Error Message -->
@@ -44,7 +44,7 @@ import { CommonModule } from '@angular/common';
                     <!-- Login Form -->
                     <form (ngSubmit)="onLogin()" class="space-y-6">
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="email" class="block text-sm font-medium text-skandia-gray dark:text-gray-300 mb-2 body-3">
                                 Correo Electrónico
                             </label>
                             <input 
@@ -60,7 +60,7 @@ import { CommonModule } from '@angular/common';
                         </div>
 
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <label for="password" class="block text-sm font-medium text-skandia-gray dark:text-gray-300 mb-2 body-3">
                                 Contraseña
                             </label>
                             <p-password 
@@ -84,14 +84,14 @@ import { CommonModule } from '@angular/common';
                                     binary 
                                     class="mr-2"
                                 />
-                                <label for="remember" class="text-sm text-gray-600 dark:text-gray-400">
+                                <label for="remember" class="text-sm text-skandia-gray-5 dark:text-gray-400 body-3">
                                     Recordarme
                                 </label>
                             </div>
                             <button 
                                 type="button" 
                                 (click)="showResetPassword = true"
-                                class="text-sm text-blue-600 hover:text-blue-500 font-medium"
+                                class="text-sm text-skandia-blue hover:text-skandia-blue font-medium body-3"
                             >
                                 ¿Olvidó su contraseña?
                             </button>
@@ -108,12 +108,12 @@ import { CommonModule } from '@angular/common';
 
                     <!-- Reset Password Section -->
                     <div *ngIf="showResetPassword" class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-600">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                        <h3 class="text-lg font-medium text-skandia-gray dark:text-white mb-4" style="font-family: var(--font-family-headings);">
                             Restablecer Contraseña
                         </h3>
                         <div class="space-y-4">
                             <div>
-                                <label for="resetEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label for="resetEmail" class="block text-sm font-medium text-skandia-gray dark:text-gray-300 mb-2 body-3">
                                     Correo Electrónico
                                 </label>
                                 <input 
@@ -153,9 +153,9 @@ import { CommonModule } from '@angular/common';
                     </div>
 
                     <!-- Demo Credentials -->
-                    <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                        <p class="text-sm text-blue-800 dark:text-blue-200 font-medium mb-2">Credenciales de prueba:</p>
-                        <p class="text-sm text-blue-600 dark:text-blue-300">
+                    <div class="mt-6 p-4 bg-skandia-light-gray dark:bg-blue-900/20 rounded-lg shadow-skandia-subtle">
+                        <p class="text-sm text-skandia-gray dark:text-blue-200 font-medium mb-2 body-3">Credenciales de prueba:</p>
+                        <p class="text-sm text-skandia-gray-4 dark:text-blue-300 body-4">
                             Email: admin@migo.com<br>
                             Contraseña: admin123
                         </p>

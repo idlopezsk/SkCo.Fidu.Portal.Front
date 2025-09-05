@@ -10,10 +10,61 @@
     padding: 2rem;
     margin-bottom: 2rem;
     border-radius: var(--content-border-radius);
+    box-shadow: var(--shadow-subtle);
 
     &:last-child {
         margin-bottom: 0;
     }
+}
+
+/* Skandia Shadow Utilities */
+.shadow-skandia-small {
+    box-shadow: var(--shadow-small);
+}
+
+.shadow-skandia-medium {
+    box-shadow: var(--shadow-medium);
+}
+
+.shadow-skandia-subtle {
+    box-shadow: var(--shadow-subtle);
+}
+
+/* Skandia Color Utilities */
+.bg-skandia-green {
+    background-color: var(--color-skandia-green);
+}
+
+.bg-skandia-gray {
+    background-color: var(--color-skandia-gray);
+}
+
+.bg-skandia-orange {
+    background-color: var(--color-skandia-orange);
+}
+
+.bg-skandia-blue {
+    background-color: var(--color-skandia-blue);
+}
+
+.bg-skandia-light-gray {
+    background-color: var(--color-skandia-light-gray);
+}
+
+.text-skandia-green {
+    color: var(--color-skandia-green);
+}
+
+.text-skandia-gray {
+    color: var(--color-skandia-gray);
+}
+
+.text-skandia-orange {
+    color: var(--color-skandia-orange);
+}
+
+.text-skandia-blue {
+    color: var(--color-skandia-blue);
 }
 
 .p-toast {

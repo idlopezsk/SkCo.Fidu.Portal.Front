@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @custom-variant dark (&:where(.app-dark, .app-dark *));
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap');
 
 @theme {
     --breakpoint-sm: 576px;
@@ -8,4 +9,72 @@
     --breakpoint-lg: 992px;
     --breakpoint-xl: 1200px;
     --breakpoint-2xl: 1920px;
+
+    /* Skandia Brand Colors */
+    --color-skandia-green: #00C83C;
+    --color-skandia-gray: #3F3F3F;
+    --color-skandia-white: #FFFFFF;
+    --color-skandia-orange: #F29F05;
+    --color-skandia-blue: #02B1FF;
+    --color-skandia-light-gray: #FAFAFA;
+    
+    /* Skandia Gray Scale */
+    --color-skandia-black: #000000;
+    --color-skandia-gray-1: #363636;
+    --color-skandia-gray-2: #444444;
+    --color-skandia-gray-3: #565656;
+    --color-skandia-gray-4: #666666;
+    --color-skandia-gray-5: #878787;
+    --color-skandia-gray-6: #A5A5A5;
+    --color-skandia-gray-7: #B7B7B7;
+    --color-skandia-gray-8: #C4C7C4;
+    --color-skandia-gray-9: #D8D8D8;
+    --color-skandia-gray-10: #DEDEDE;
+    --color-skandia-gray-11: #EDEDED;
+
+    /* Skandia Shadows */
+    --shadow-small: 0px 2px 6px rgba(0,0,0,0.25);
+    --shadow-medium: 0px 12px 20px rgba(0,0,0,0.25);
+    --shadow-subtle: 0px 1px 3px rgba(0,0,0,0.15);
+
+    /* Typography */
+    --font-family-headings: 'Montserrat', sans-serif;
+    --font-family-body: 'Open Sans', sans-serif;
+
+    /* Skandia Color Palette for Tailwind */
+    --color-primary-50: #e6f9ec;
+    --color-primary-100: #ccf3d9;
+    --color-primary-200: #99e7b3;
+    --color-primary-300: #66db8d;
+    --color-primary-400: #33cf67;
+    --color-primary-500: #00C83C;
+    --color-primary-600: #00a030;
+    --color-primary-700: #007824;
+    --color-primary-800: #005018;
+    --color-primary-900: #00280c;
+    --color-primary-950: #001406;
+
+    --color-secondary-50: #fef7e6;
+    --color-secondary-100: #fdefcc;
+    --color-secondary-200: #fbdf99;
+    --color-secondary-300: #f9cf66;
+    --color-secondary-400: #f7bf33;
+    --color-secondary-500: #F29F05;
+    --color-secondary-600: #c27f04;
+    --color-secondary-700: #915f03;
+    --color-secondary-800: #614002;
+    --color-secondary-900: #302001;
+    --color-secondary-950: #181000;
+
+    --color-accent-50: #e6f8ff;
+    --color-accent-100: #ccf1ff;
+    --color-accent-200: #99e3ff;
+    --color-accent-300: #66d5ff;
+    --color-accent-400: #33c7ff;
+    --color-accent-500: #02B1FF;
+    --color-accent-600: #028ecc;
+    --color-accent-700: #016a99;
+    --color-accent-800: #014766;
+    --color-accent-900: #002333;
+    --color-accent-950: #001119;
 }

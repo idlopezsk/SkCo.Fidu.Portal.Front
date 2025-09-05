@@ -11,70 +11,70 @@ import { DashboardService, ClientMetrics, TopClient } from '../../../services/da
     template: `
         <div class="space-y-6">
             <!-- Welcome Header -->
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
-                <h1 class="text-3xl font-bold mb-2">
+            <div class="bg-skandia-green rounded-xl p-6 text-white shadow-skandia-medium">
+                <h1 class="text-3xl font-bold mb-2" style="font-family: var(--font-family-headings);">
                     Bienvenido al Portal MIGO
                 </h1>
-                <p class="text-xl opacity-90 mb-1">{{ currentUser()?.name }}</p>
-                <p class="text-sm opacity-75">
+                <p class="text-xl opacity-90 mb-1 body-1">{{ currentUser()?.name }}</p>
+                <p class="text-sm opacity-75 body-3">
                     Último ingreso: {{ formatLastLogin() }}
                 </p>
             </div>
 
             <!-- Metrics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total de Clientes</p>
-                            <p class="text-3xl font-bold text-gray-900 dark:text-white">
+                            <p class="text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3">Total de Clientes</p>
+                            <p class="text-3xl font-bold text-skandia-gray dark:text-white" style="font-family: var(--font-family-headings);">
                                 {{ formatNumber(metrics.totalClients) }}
                             </p>
                         </div>
-                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                            <i class="pi pi-users text-2xl text-blue-600 dark:text-blue-400"></i>
+                        <div class="w-12 h-12 bg-skandia-light-gray dark:bg-blue-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-users text-2xl text-skandia-blue dark:text-blue-400"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Clientes Activos</p>
-                            <p class="text-3xl font-bold text-green-600">
+                            <p class="text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3">Clientes Activos</p>
+                            <p class="text-3xl font-bold text-skandia-green" style="font-family: var(--font-family-headings);">
                                 {{ formatNumber(metrics.activeClients) }}
                             </p>
                         </div>
-                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-                            <i class="pi pi-check-circle text-2xl text-green-600 dark:text-green-400"></i>
+                        <div class="w-12 h-12 bg-skandia-light-gray dark:bg-green-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-check-circle text-2xl text-skandia-green dark:text-green-400"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Recursos Administrados</p>
-                            <p class="text-3xl font-bold text-purple-600">
+                            <p class="text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3">Recursos Administrados</p>
+                            <p class="text-3xl font-bold text-skandia-blue" style="font-family: var(--font-family-headings);">
                                 {{ formatCurrency(metrics.totalAssets) }}
                             </p>
                         </div>
-                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                            <i class="pi pi-dollar text-2xl text-purple-600 dark:text-purple-400"></i>
+                        <div class="w-12 h-12 bg-skandia-light-gray dark:bg-purple-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-dollar text-2xl text-skandia-blue dark:text-purple-400"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">En Implementación</p>
-                            <p class="text-3xl font-bold text-orange-600">
+                            <p class="text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3">En Implementación</p>
+                            <p class="text-3xl font-bold text-skandia-orange" style="font-family: var(--font-family-headings);">
                                 {{ formatNumber(metrics.implementationClients) }}
                             </p>
                         </div>
-                        <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
-                            <i class="pi pi-cog text-2xl text-orange-600 dark:text-orange-400"></i>
+                        <div class="w-12 h-12 bg-skandia-light-gray dark:bg-orange-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-cog text-2xl text-skandia-orange dark:text-orange-400"></i>
                         </div>
                     </div>
                 </div>
@@ -83,10 +83,10 @@ import { DashboardService, ClientMetrics, TopClient } from '../../../services/da
             <!-- Top Clients Cards -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Top Clients by Balance -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="p-6 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center">
-                            <i class="pi pi-chart-line text-blue-600 mr-3"></i>
+                        <h3 class="text-xl font-bold text-skandia-gray dark:text-white flex items-center" style="font-family: var(--font-family-headings);">
+                            <i class="pi pi-chart-line text-skandia-blue mr-3"></i>
                             Top Clientes por Saldo
                         </h3>
                     </div>
@@ -95,15 +95,15 @@ import { DashboardService, ClientMetrics, TopClient } from '../../../services/da
                             <div *ngFor="let client of topClientsByBalance; let i = index" 
                                  class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                 <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-sm font-bold text-blue-600 dark:text-blue-400">{{ i + 1 }}</span>
+                                    <div class="w-8 h-8 bg-skandia-light-gray dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3 shadow-skandia-subtle">
+                                        <span class="text-sm font-bold text-skandia-blue dark:text-blue-400 body-3">{{ i + 1 }}</span>
                                     </div>
                                     <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">{{ client.name }}</p>
+                                        <p class="font-medium text-skandia-gray dark:text-white body-2">{{ client.name }}</p>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-bold text-green-600">{{ formatCurrency(client.balance) }}</p>
+                                    <p class="font-bold text-skandia-green body-2">{{ formatCurrency(client.balance) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -111,10 +111,10 @@ import { DashboardService, ClientMetrics, TopClient } from '../../../services/da
                 </div>
 
                 <!-- Top Clients by Transactions -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="p-6 border-b border-gray-100 dark:border-gray-700">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center">
-                            <i class="pi pi-sync text-purple-600 mr-3"></i>
+                        <h3 class="text-xl font-bold text-skandia-gray dark:text-white flex items-center" style="font-family: var(--font-family-headings);">
+                            <i class="pi pi-sync text-skandia-orange mr-3"></i>
                             Top Clientes por Transaccionalidad
                         </h3>
                     </div>
@@ -123,16 +123,16 @@ import { DashboardService, ClientMetrics, TopClient } from '../../../services/da
                             <div *ngFor="let client of topClientsByTransactions; let i = index" 
                                  class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                 <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-sm font-bold text-purple-600 dark:text-purple-400">{{ i + 1 }}</span>
+                                    <div class="w-8 h-8 bg-skandia-light-gray dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-3 shadow-skandia-subtle">
+                                        <span class="text-sm font-bold text-skandia-orange dark:text-purple-400 body-3">{{ i + 1 }}</span>
                                     </div>
                                     <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">{{ client.name }}</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ client.operations }} operaciones/mes</p>
+                                        <p class="font-medium text-skandia-gray dark:text-white body-2">{{ client.name }}</p>
+                                        <p class="text-sm text-skandia-gray-5 dark:text-gray-400 body-4">{{ client.operations }} operaciones/mes</p>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-bold text-green-600">{{ formatCurrency(client.balance) }}</p>
+                                    <p class="font-bold text-skandia-green body-2">{{ formatCurrency(client.balance) }}</p>
                                 </div>
                             </div>
                         </div>

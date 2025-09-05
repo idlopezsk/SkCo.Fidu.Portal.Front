@@ -20,10 +20,10 @@ import { MenuItem } from 'primeng/api';
                     <i class="pi pi-bars"></i>
                 </button>
                 <a class="layout-topbar-logo" routerLink="/">
-                    <div class="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                    <div class="w-12 h-12 bg-skandia-green rounded-lg flex items-center justify-center shadow-skandia-subtle">
                         <i class="pi pi-building text-2xl text-white"></i>
                     </div>
-                    <span class="text-xl font-bold">Portal MIGO</span>
+                    <span class="text-xl font-bold text-skandia-gray" style="font-family: var(--font-family-headings);">Portal MIGO</span>
                 </a>
             </div>
 
@@ -54,12 +54,12 @@ import { MenuItem } from 'primeng/api';
                         class="layout-topbar-action flex items-center gap-2 px-3"
                         (click)="userMenu.toggle($event)"
                     >
-                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                        <div class="w-8 h-8 bg-skandia-green rounded-full flex items-center justify-center shadow-skandia-subtle">
                             <span class="text-white text-sm font-medium">
                                 {{ getUserInitials() }}
                             </span>
                         </div>
-                        <span class="hidden lg:block text-sm font-medium">{{ currentUser()?.name }}</span>
+                        <span class="hidden lg:block text-sm font-medium text-skandia-gray">{{ currentUser()?.name }}</span>
                         <i class="pi pi-chevron-down text-xs"></i>
                     </button>
                     <p-menu #userMenu [popup]="true" [model]="userMenuItems" />
