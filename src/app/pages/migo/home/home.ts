@@ -1,8 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
-import { AuthService } from '../../../services/auth.service';
-import { DashboardService, ClientMetrics, TopClient } from '../../../services/dashboard.service';
+import { AuthService } from '../../services/auth.service';
+import { DashboardService, ClientMetrics, TopClient } from '../../services/dashboard.service';
 
 @Component({
     selector: 'app-migo-home',
