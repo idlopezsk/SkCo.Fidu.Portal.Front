@@ -1,90 +1,140 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { RippleModule } from 'primeng/ripple';
-import { MessageModule } from 'primeng/message';
-import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-import { AuthService } from '../../services/auth.service';
+import { CardModule } from 'primeng/card';
+import { AuthService } from '../../../services/auth.service';
+import { DashboardService, ClientMetrics, TopClient } from '../../../services/dashboard.service';
 
 @Component({
-    selector: 'app-migo-login',
+    selector: 'app-migo-home',
     standalone: true,
-    imports: [
-        CommonModule,
-        FormsModule,
-        ButtonModule,
-        CheckboxModule,
-        InputTextModule,
-        PasswordModule,
-        RouterModule,
-        RippleModule,
-        AppFloatingConfigurator,
-        MessageModule
-    ],
+    imports: [CommonModule, CardModule],
     template: `
-        <app-floating-configurator />
-        <div class="bg-skandia-light-gray dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
-            <div class="flex flex-col items-center justify-center">
-                <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--color-skandia-green) 10%, rgba(33, 150, 243, 0) 30%)">
-                    <div class="w-full bg-white dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px; box-shadow: var(--shadow-medium);">
-                        <div class="text-center mb-8">
-                            <div class="w-20 h-20 bg-skandia-green rounded-full flex items-center justify-center mx-auto mb-6 shadow-skandia-medium">
-                                <i class="pi pi-building text-3xl text-white"></i>
-                            </div>
-                            <div class="text-skandia-gray dark:text-surface-0 text-3xl font-bold mb-4" style="font-family: var(--font-family-headings);">Portal MIGO Fiduciaria</div>
-                            <span class="text-skandia-gray-5 font-medium body-1">Ingrese sus credenciales para continuar</span>
+        <div class="space-y-6">
+            <!-- Welcome Header -->
+            <div class="bg-skandia-green rounded-xl p-8 text-white shadow-skandia-medium">
+                <h1 class="text-3xl font-bold mb-2" style="font-family: var(--font-family-headings);">
+                    Bienvenido al Portal MIGO
+                </h1>
+                <p class="text-xl opacity-90 mb-2 body-1">{{ currentUser()?.name }}</p>
+                <p class="text-base opacity-75 body-3">
+                    Último ingreso: {{ formatLastLogin() }}
+                </p>
+            </div>
+
+            <!-- Metrics Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs lg:text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3 mb-1">Total de Clientes</p>
+                            <p class="text-xl lg:text-3xl font-bold text-skandia-gray dark:text-white" style="font-family: var(--font-family-headings);">
+                                {{ formatNumber(metrics.totalClients) }}
+                            </p>
                         </div>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-skandia-light-gray dark:bg-blue-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-users text-lg lg:text-2xl text-skandia-blue dark:text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
 
-                        <div class="space-y-6">
-                            <div>
-                                <label for="email1" class="block text-skandia-gray dark:text-surface-0 text-lg font-medium mb-2 body-2">Correo Electrónico</label>
-                                <input 
-                                    pInputText 
-                                    id="email1" 
-                                    type="email" 
-                                    placeholder="usuario@migo.com" 
-                                    class="w-full md:w-120 border-2 border-skandia-gray-9 focus:border-skandia-green rounded-lg p-3 body-1" 
-                                    [(ngModel)]="email" 
-                                />
-                            </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs lg:text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3 mb-1">Clientes Activos</p>
+                            <p class="text-xl lg:text-3xl font-bold text-skandia-green" style="font-family: var(--font-family-headings);">
+                                {{ formatNumber(metrics.activeClients) }}
+                            </p>
+                        </div>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-skandia-light-gray dark:bg-green-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-check-circle text-lg lg:text-2xl text-skandia-green dark:text-green-400"></i>
+                        </div>
+                    </div>
+                </div>
 
-                            <div>
-                                <label for="password1" class="block text-skandia-gray dark:text-surface-0 font-medium text-lg mb-2 body-2">Contraseña</label>
-                                <p-password 
-                                    id="password1" 
-                                    [(ngModel)]="password" 
-                                    placeholder="Ingrese su contraseña" 
-                                    [toggleMask]="true" 
-                                    styleClass="w-full border-2 border-skandia-gray-9 focus:border-skandia-green rounded-lg" 
-                                    [fluid]="true" 
-                                    [feedback]="false"
-                                />
-                            </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs lg:text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3 mb-1">Recursos Administrados</p>
+                            <p class="text-lg lg:text-2xl font-bold text-skandia-blue" style="font-family: var(--font-family-headings);">
+                                {{ formatCurrency(metrics.totalAssets) }}
+                            </p>
+                        </div>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-skandia-light-gray dark:bg-purple-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-dollar text-lg lg:text-2xl text-skandia-blue dark:text-purple-400"></i>
+                        </div>
+                    </div>
+                </div>
 
-                            <div *ngIf="errorMessage()" class="mb-4">
-                                <p-message severity="error" [text]="errorMessage()" />
-                            </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs lg:text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3 mb-1">En Implementación</p>
+                            <p class="text-xl lg:text-3xl font-bold text-skandia-orange" style="font-family: var(--font-family-headings);">
+                                {{ formatNumber(metrics.implementationClients) }}
+                            </p>
+                        </div>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-skandia-light-gray dark:bg-orange-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-cog text-lg lg:text-2xl text-skandia-orange dark:text-orange-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                            <div class="flex items-center justify-between mt-6 mb-8 gap-8">
+            <!-- Top Clients Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Top Clients by Balance -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="text-xl font-bold text-skandia-gray dark:text-white flex items-center" style="font-family: var(--font-family-headings);">
+                            <i class="pi pi-chart-line text-skandia-blue mr-3"></i>
+                            Top Clientes por Saldo
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div *ngFor="let client of topClientsByBalance; let i = index" 
+                                 class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                 <div class="flex items-center">
-                                    <p-checkbox [(ngModel)]="rememberMe" id="rememberme1" binary class="mr-2"></p-checkbox>
-                                    <label for="rememberme1" class="text-skandia-gray dark:text-surface-0 body-2">Recordarme</label>
+                                    <div class="w-8 h-8 bg-skandia-light-gray dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3 shadow-skandia-subtle">
+                                        <span class="text-sm font-bold text-skandia-blue dark:text-blue-400 body-3">{{ i + 1 }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-skandia-gray dark:text-white body-2">{{ client.name }}</p>
+                                    </div>
                                 </div>
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-skandia-blue hover:text-blue-600 body-2">¿Olvidó su contraseña?</span>
+                                <div class="text-right">
+                                    <p class="font-bold text-skandia-green body-2">{{ formatCurrency(client.balance) }}</p>
+                                </div>
                             </div>
-                            
-                            <p-button 
-                                label="Iniciar Sesión" 
-                                styleClass="w-full bg-skandia-green hover:bg-green-600 border-0 text-white font-bold py-3 px-6 rounded-lg shadow-skandia-small transition-all duration-200"
-                                [loading]="loading()"
-                                (onClick)="login()"
-                                style="font-family: var(--font-family-headings);"
-                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Clients by Transactions -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="text-xl font-bold text-skandia-gray dark:text-white flex items-center" style="font-family: var(--font-family-headings);">
+                            <i class="pi pi-sync text-skandia-orange mr-3"></i>
+                            Top Clientes por Transaccionalidad
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div *ngFor="let client of topClientsByTransactions; let i = index" 
+                                 class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-skandia-light-gray dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-3 shadow-skandia-subtle">
+                                        <span class="text-sm font-bold text-skandia-orange dark:text-purple-400 body-3">{{ i + 1 }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-skandia-gray dark:text-white body-2">{{ client.name }}</p>
+                                        <p class="text-sm text-skandia-gray-5 dark:text-gray-400 body-4">{{ client.operations }} operaciones/mes</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-skandia-green body-2">{{ formatCurrency(client.balance) }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -92,36 +142,45 @@ import { AuthService } from '../../services/auth.service';
         </div>
     `
 })
-export class MigoLogin {
+export class MigoHome {
     private authService = inject(AuthService);
-    private router = inject(Router);
+    private dashboardService = inject(DashboardService);
 
-    email: string = '';
-    password: string = '';
-    rememberMe: boolean = false;
-    loading = signal(false);
-    errorMessage = signal('');
+    currentUser = computed(() => this.authService.getCurrentUser()());
+    
+    metrics: ClientMetrics;
+    topClientsByBalance: TopClient[];
+    topClientsByTransactions: TopClient[];
 
-    async login() {
-        if (!this.email || !this.password) {
-            this.errorMessage.set('Por favor ingrese correo y contraseña');
-            return;
-        }
+    constructor() {
+        this.metrics = this.dashboardService.getClientMetrics();
+        this.topClientsByBalance = this.dashboardService.getTopClientsByBalance();
+        this.topClientsByTransactions = this.dashboardService.getTopClientsByTransactions();
+    }
 
-        this.loading.set(true);
-        this.errorMessage.set('');
+    formatLastLogin(): string {
+        const lastLogin = this.currentUser()?.lastLogin;
+        if (!lastLogin) return 'Primera vez';
+        
+        return new Intl.DateTimeFormat('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(new Date(lastLogin));
+    }
 
-        try {
-            const success = await this.authService.login(this.email, this.password);
-            if (success) {
-                this.router.navigate(['/']);
-            } else {
-                this.errorMessage.set('Credenciales incorrectas. Intente nuevamente.');
-            }
-        } catch (error) {
-            this.errorMessage.set('Error al iniciar sesión. Intente nuevamente.');
-        } finally {
-            this.loading.set(false);
-        }
+    formatNumber(value: number): string {
+        return new Intl.NumberFormat('es-ES').format(value);
+    }
+
+    formatCurrency(value: number): string {
+        return new Intl.NumberFormat('es-ES', {
+            style: 'currency',
+            currency: 'COP',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(value);
     }
 }

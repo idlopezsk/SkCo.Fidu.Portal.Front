@@ -2,13 +2,17 @@ import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
-import { AuthService } from '../../services/auth.service';
-import { DashboardService, ClientMetrics, TopClient } from '../../services/dashboard.service';
+import { AuthService } from '../../../services/auth.service';
+import { DashboardService, ClientMetrics, TopClient } from '../../../services/dashboard.service';
+import { RatingModule } from 'primeng/rating';
+import { ChartModule } from 'primeng/chart';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 
 @Component({
-    selector: 'app-migo-home',
+    selector: 'app-service-dashboard',
     standalone: true,
-    imports: [CommonModule, FormsModule, CardModule],
+    imports: [CommonModule, FormsModule, CardModule, RatingModule, ChartModule, TableModule, TagModule],
     template: `
         <div class="space-y-6">
             <!-- Welcome Header -->
@@ -143,7 +147,7 @@ import { DashboardService, ClientMetrics, TopClient } from '../../services/dashb
         </div>
     `
 })
-export class MigoHome {
+export class ServiceDashboard {
     private authService = inject(AuthService);
     private dashboardService = inject(DashboardService);
 
