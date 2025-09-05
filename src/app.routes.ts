@@ -1,23 +1,28 @@
 import { Routes } from '@angular/router';
-import { AppLayout } from './app/layout/component/app.layout';
-import { Dashboard } from './app/pages/dashboard/dashboard';
-import { Documentation } from './app/pages/documentation/documentation';
-import { Landing } from './app/pages/landing/landing';
+import { AppMigoLayout } from './app/layout/component/app.migo-layout';
+import { MigoHome } from './app/pages/migo/home/home';
+import { MigoClients } from './app/pages/migo/clients/clients';
+import { ServiceDashboard } from './app/pages/migo/service-dashboard/service-dashboard';
+import { ClientProfiling } from './app/pages/migo/client-profiling/client-profiling';
+import { MigoProfile } from './app/pages/migo/profile/profile';
+import { MigoLogin } from './app/pages/auth/migo-login';
 import { Notfound } from './app/pages/notfound/notfound';
+import { authGuard } from './app/guards/auth.guard';
 
 export const appRoutes: Routes = [
     {
         path: '',
-        component: AppLayout,
+        component: AppMigoLayout,
+        canActivate: [authGuard],
         children: [
-            { path: '', component: Dashboard },
-            { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
-            { path: 'documentation', component: Documentation },
-            { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
+            { path: '', component: MigoHome },
+            { path: 'migo/clients', component: MigoClients },
+            { path: 'migo/service-dashboard', component: ServiceDashboard },
+            { path: 'migo/client-profiling', component: ClientProfiling },
+            { path: 'migo/profile', component: MigoProfile }
         ]
     },
-    { path: 'landing', component: Landing },
+    { path: 'auth/login', component: MigoLogin },
     { path: 'notfound', component: Notfound },
-    { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }
 ];
