@@ -52,6 +52,11 @@ export class AppMigoMenu {
                         label: 'Dashboard de Servicio', 
                         icon: 'pi pi-fw pi-chart-bar', 
                         routerLink: ['/migo/service-dashboard'] 
+                    },
+                    { 
+                        label: 'Bitácora de Implementación', 
+                        icon: 'pi pi-fw pi-cog', 
+                        routerLink: ['/migo/implementation-log'] 
                     }
                 ]
             },
