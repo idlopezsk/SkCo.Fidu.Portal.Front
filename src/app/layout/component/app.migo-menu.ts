@@ -62,6 +62,11 @@ export class AppMigoMenu {
                         label: 'Bitácora de Implementación', 
                         icon: 'pi pi-fw pi-cog', 
                         routerLink: ['/migo/implementation-log'] 
+                    },
+                    { 
+                        label: 'Bitácora de Implementación', 
+                        icon: 'pi pi-fw pi-cog', 
+                        routerLink: ['/migo/implementation-log'] 
                     }
                 ]
             },
