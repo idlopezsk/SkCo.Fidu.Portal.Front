@@ -1,145 +1,140 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChartModule } from 'primeng/chart';
-import { RatingModule } from 'primeng/rating';
-
-interface ServiceMetrics {
-    totalCases: number;
-    resolvedCases: number;
-    inProgressCases: number;
-    averageResolutionTime: number;
-}
-
-interface ResolutionStatus {
-    status: string;
-    count: number;
-    color: string;
-}
+import { FormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
+import { AuthService } from '../../services/auth.service';
+import { DashboardService, ClientMetrics, TopClient } from '../../services/dashboard.service';
 
 @Component({
-    selector: 'app-service-dashboard',
+    selector: 'app-migo-home',
     standalone: true,
-    imports: [CommonModule, ChartModule, RatingModule],
+    imports: [CommonModule, FormsModule, CardModule],
     template: `
         <div class="space-y-6">
-            <!-- Header -->
-            <div class="bg-skandia-green rounded-xl p-6 text-white shadow-skandia-medium">
+            <!-- Welcome Header -->
+            <div class="bg-skandia-green rounded-xl p-8 text-white shadow-skandia-medium">
                 <h1 class="text-3xl font-bold mb-2" style="font-family: var(--font-family-headings);">
-                    Bitácora de Servicios
+                    Bienvenido al Portal MIGO
                 </h1>
-                <p class="text-xl opacity-90 body-1">
-                    Panel de control y seguimiento de casos de servicio
+                <p class="text-xl opacity-90 mb-2 body-1">{{ currentUser()?.name }}</p>
+                <p class="text-base opacity-75 body-3">
+                    Último ingreso: {{ formatLastLogin() }}
                 </p>
             </div>
 
-            <!-- Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
+            <!-- Metrics Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3">Total de Casos</p>
-                            <p class="text-3xl font-bold text-skandia-gray dark:text-white" style="font-family: var(--font-family-headings);">
-                                {{ formatNumber(metrics.totalCases) }}
+                            <p class="text-xs lg:text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3 mb-1">Total de Clientes</p>
+                            <p class="text-xl lg:text-3xl font-bold text-skandia-gray dark:text-white" style="font-family: var(--font-family-headings);">
+                                {{ formatNumber(metrics.totalClients) }}
                             </p>
                         </div>
-                        <div class="w-12 h-12 bg-skandia-light-gray dark:bg-blue-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
-                            <i class="pi pi-file text-2xl text-skandia-blue dark:text-blue-400"></i>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-skandia-light-gray dark:bg-blue-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-users text-lg lg:text-2xl text-skandia-blue dark:text-blue-400"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3">Casos Resueltos</p>
-                            <p class="text-3xl font-bold text-skandia-green" style="font-family: var(--font-family-headings);">
-                                {{ formatNumber(metrics.resolvedCases) }}
+                            <p class="text-xs lg:text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3 mb-1">Clientes Activos</p>
+                            <p class="text-xl lg:text-3xl font-bold text-skandia-green" style="font-family: var(--font-family-headings);">
+                                {{ formatNumber(metrics.activeClients) }}
                             </p>
                         </div>
-                        <div class="w-12 h-12 bg-skandia-light-gray dark:bg-green-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
-                            <i class="pi pi-check-circle text-2xl text-skandia-green dark:text-green-400"></i>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-skandia-light-gray dark:bg-green-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-check-circle text-lg lg:text-2xl text-skandia-green dark:text-green-400"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3">Casos en Progreso</p>
-                            <p class="text-3xl font-bold text-skandia-orange" style="font-family: var(--font-family-headings);">
-                                {{ formatNumber(metrics.inProgressCases) }}
+                            <p class="text-xs lg:text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3 mb-1">Recursos Administrados</p>
+                            <p class="text-lg lg:text-2xl font-bold text-skandia-blue" style="font-family: var(--font-family-headings);">
+                                {{ formatCurrency(metrics.totalAssets) }}
                             </p>
                         </div>
-                        <div class="w-12 h-12 bg-skandia-light-gray dark:bg-orange-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
-                            <i class="pi pi-clock text-2xl text-skandia-orange dark:text-orange-400"></i>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-skandia-light-gray dark:bg-purple-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-dollar text-lg lg:text-2xl text-skandia-blue dark:text-purple-400"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 lg:p-6 shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3">Tiempo Promedio Resolución</p>
-                            <p class="text-3xl font-bold text-skandia-blue" style="font-family: var(--font-family-headings);">
-                                {{ metrics.averageResolutionTime }}h
+                            <p class="text-xs lg:text-sm font-medium text-skandia-gray-5 dark:text-gray-400 body-3 mb-1">En Implementación</p>
+                            <p class="text-xl lg:text-3xl font-bold text-skandia-orange" style="font-family: var(--font-family-headings);">
+                                {{ formatNumber(metrics.implementationClients) }}
                             </p>
                         </div>
-                        <div class="w-12 h-12 bg-skandia-light-gray dark:bg-purple-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
-                            <i class="pi pi-stopwatch text-2xl text-skandia-blue dark:text-purple-400"></i>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-skandia-light-gray dark:bg-orange-900/30 rounded-lg flex items-center justify-center shadow-skandia-subtle">
+                            <i class="pi pi-cog text-lg lg:text-2xl text-skandia-orange dark:text-orange-400"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Charts Section -->
+            <!-- Top Clients Cards -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Resolution Status Chart -->
+                <!-- Top Clients by Balance -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="p-6 border-b border-gray-100 dark:border-gray-700">
                         <h3 class="text-xl font-bold text-skandia-gray dark:text-white flex items-center" style="font-family: var(--font-family-headings);">
-                            <i class="pi pi-chart-bar text-skandia-blue mr-3"></i>
-                            Estado de Resolución
+                            <i class="pi pi-chart-line text-skandia-blue mr-3"></i>
+                            Top Clientes por Saldo
                         </h3>
                     </div>
                     <div class="p-6">
-                        <p-chart type="bar" [data]="resolutionChartData" [options]="resolutionChartOptions" class="h-64" />
+                        <div class="space-y-4">
+                            <div *ngFor="let client of topClientsByBalance; let i = index" 
+                                 class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-skandia-light-gray dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3 shadow-skandia-subtle">
+                                        <span class="text-sm font-bold text-skandia-blue dark:text-blue-400 body-3">{{ i + 1 }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-skandia-gray dark:text-white body-2">{{ client.name }}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-skandia-green body-2">{{ formatCurrency(client.balance) }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Customer Satisfaction -->
+                <!-- Top Clients by Transactions -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-skandia-small border border-gray-100 dark:border-gray-700">
                     <div class="p-6 border-b border-gray-100 dark:border-gray-700">
                         <h3 class="text-xl font-bold text-skandia-gray dark:text-white flex items-center" style="font-family: var(--font-family-headings);">
-                            <i class="pi pi-star text-skandia-orange mr-3"></i>
-                            Satisfacción del Cliente
+                            <i class="pi pi-sync text-skandia-orange mr-3"></i>
+                            Top Clientes por Transaccionalidad
                         </h3>
                     </div>
                     <div class="p-6">
-                        <div class="text-center mb-6">
-                            <div class="text-4xl font-bold text-skandia-orange mb-2" style="font-family: var(--font-family-headings);">
-                                {{ averageRating.toFixed(1) }}
-                            </div>
-                            <p-rating 
-                                [ngModel]="averageRating" 
-                                [readonly]="true" 
-                                [stars]="5"
-                                class="mb-2"
-                            />
-                            <p class="text-skandia-gray-5 dark:text-gray-400 body-3">
-                                Basado en {{ totalReviews }} evaluaciones
-                            </p>
-                        </div>
-                        
-                        <div class="space-y-3">
-                            <div *ngFor="let rating of ratingDistribution" class="flex items-center gap-3">
-                                <span class="text-sm text-skandia-gray dark:text-white body-3 w-8">{{ rating.stars }}★</span>
-                                <div class="flex-1 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                                    <div 
-                                        class="bg-skandia-orange h-2 rounded-full transition-all duration-300"
-                                        [style.width.%]="rating.percentage"
-                                    ></div>
+                        <div class="space-y-4">
+                            <div *ngFor="let client of topClientsByTransactions; let i = index" 
+                                 class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-skandia-light-gray dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-3 shadow-skandia-subtle">
+                                        <span class="text-sm font-bold text-skandia-orange dark:text-purple-400 body-3">{{ i + 1 }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-skandia-gray dark:text-white body-2">{{ client.name }}</p>
+                                        <p class="text-sm text-skandia-gray-5 dark:text-gray-400 body-4">{{ client.operations }} operaciones/mes</p>
+                                    </div>
                                 </div>
-                                <span class="text-sm text-skandia-gray-5 dark:text-gray-400 body-4 w-12">{{ rating.count }}</span>
+                                <div class="text-right">
+                                    <p class="font-bold text-skandia-green body-2">{{ formatCurrency(client.balance) }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -148,81 +143,45 @@ interface ResolutionStatus {
         </div>
     `
 })
-export class ServiceDashboard {
-    metrics: ServiceMetrics = {
-        totalCases: 1247,
-        resolvedCases: 1089,
-        inProgressCases: 158,
-        averageResolutionTime: 24
-    };
+export class MigoHome {
+    private authService = inject(AuthService);
+    private dashboardService = inject(DashboardService);
 
-    resolutionStatusData: ResolutionStatus[] = [
-        { status: 'Resueltos', count: 1089, color: '#00C83C' },
-        { status: 'En Progreso', count: 158, color: '#F29F05' },
-        { status: 'Pendientes', count: 45, color: '#ef4444' },
-        { status: 'Escalados', count: 23, color: '#02B1FF' }
-    ];
-
-    averageRating: number = 4.3;
-    totalReviews: number = 892;
+    currentUser = computed(() => this.authService.getCurrentUser()());
     
-    ratingDistribution = [
-        { stars: 5, count: 456, percentage: 51.1 },
-        { stars: 4, count: 298, percentage: 33.4 },
-        { stars: 3, count: 89, percentage: 10.0 },
-        { stars: 2, count: 34, percentage: 3.8 },
-        { stars: 1, count: 15, percentage: 1.7 }
-    ];
-
-    resolutionChartData: any;
-    resolutionChartOptions: any;
+    metrics: ClientMetrics;
+    topClientsByBalance: TopClient[];
+    topClientsByTransactions: TopClient[];
 
     constructor() {
-        this.initCharts();
+        this.metrics = this.dashboardService.getClientMetrics();
+        this.topClientsByBalance = this.dashboardService.getTopClientsByBalance();
+        this.topClientsByTransactions = this.dashboardService.getTopClientsByTransactions();
     }
 
-    initCharts() {
-        this.resolutionChartData = {
-            labels: this.resolutionStatusData.map(d => d.status),
-            datasets: [
-                {
-                    label: 'Casos',
-                    backgroundColor: this.resolutionStatusData.map(d => d.color),
-                    data: this.resolutionStatusData.map(d => d.count)
-                }
-            ]
-        };
-
-        this.resolutionChartOptions = {
-            maintainAspectRatio: false,
-            aspectRatio: 0.8,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: '#878787'
-                    },
-                    grid: {
-                        display: false
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: '#878787'
-                    },
-                    grid: {
-                        color: '#EDEDED'
-                    }
-                }
-            }
-        };
+    formatLastLogin(): string {
+        const lastLogin = this.currentUser()?.lastLogin;
+        if (!lastLogin) return 'Primera vez';
+        
+        return new Intl.DateTimeFormat('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(new Date(lastLogin));
     }
 
     formatNumber(value: number): string {
         return new Intl.NumberFormat('es-ES').format(value);
+    }
+
+    formatCurrency(value: number): string {
+        return new Intl.NumberFormat('es-ES', {
+            style: 'currency',
+            currency: 'COP',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(value);
     }
 }
