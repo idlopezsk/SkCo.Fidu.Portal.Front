@@ -142,7 +142,7 @@ import { DashboardService, ClientMetrics, TopClient } from '../../../services/da
         </div>
     `
 })
-export class MigoHome {
+export class MigoClients {
     private authService = inject(AuthService);
     private dashboardService = inject(DashboardService);
 
