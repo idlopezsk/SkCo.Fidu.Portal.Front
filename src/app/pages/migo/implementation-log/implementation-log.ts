@@ -5,7 +5,7 @@ import { AuthService } from '../../../services/auth.service';
 import { DashboardService, ClientMetrics, TopClient } from '../../../services/dashboard.service';
 
 @Component({
-    selector: 'app-migo-home',
+    selector: 'app-implementation-log',
     standalone: true,
     imports: [CommonModule, CardModule],
     template: `
@@ -142,7 +142,7 @@ import { DashboardService, ClientMetrics, TopClient } from '../../../services/da
         </div>
     `
 })
-export class MigoHome {
+export class ImplementationLog {
     private authService = inject(AuthService);
     private dashboardService = inject(DashboardService);
 
